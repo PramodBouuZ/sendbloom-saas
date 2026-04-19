@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Papa from "papaparse";
 import { z } from "zod";
 import { zodValidator } from "@tanstack/zod-adapter";
@@ -39,7 +39,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { Upload, Plus, Search, Trash2, Users, Loader2, Ban } from "lucide-react";
 
