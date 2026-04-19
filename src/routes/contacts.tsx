@@ -2,7 +2,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import Papa from "papaparse";
 import { z } from "zod";
-import { zodValidator } from "@tanstack/zod-adapter";
+
 import { Protected } from "@/lib/protected";
 import { AppShell } from "@/components/app-shell";
 import { useAuth } from "@/lib/auth-context";
