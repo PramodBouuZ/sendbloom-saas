@@ -50,6 +50,8 @@ const searchSchema = z.object({
   tag: z.string().optional().default(""),
 });
 
+type SearchParams = z.infer<typeof searchSchema>;
+
 export const Route = createFileRoute("/contacts")({
   head: () => ({ meta: [{ title: "Contacts — BANTConfirm" }] }),
   validateSearch: zodValidator(searchSchema),
