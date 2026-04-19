@@ -55,9 +55,10 @@ function Tenants() {
 
   const updatePlan = async (id: string, plan: string) => {
     const limits: Record<string, number> = { free: 1000, starter: 25000, pro: 250000, enterprise: 1000000 };
+    const planTyped = plan as "free" | "starter" | "pro" | "enterprise";
     const { error } = await supabase
       .from("tenants")
-      .update({ plan: plan as TenantRow["plan"], monthly_send_limit: limits[plan] })
+      .update({ plan: planTyped, monthly_send_limit: limits[plan] })
       .eq("id", id);
     if (error) toast.error(error.message);
     else { toast.success("Plan updated"); load(); }
