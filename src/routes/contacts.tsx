@@ -96,7 +96,7 @@ function ContactsView() {
   useEffect(() => {
     const id = setTimeout(() => {
       if (qInput !== search.q) {
-        navigate({ search: (s) => ({ ...s, q: qInput, page: 1 }) });
+        navigate({ search: (s: SearchParams) => ({ ...s, q: qInput, page: 1 }) });
       }
     }, 300);
     return () => clearTimeout(id);
@@ -216,7 +216,7 @@ function ContactsView() {
         <select
           value={search.tag}
           onChange={(e) =>
-            navigate({ search: (s) => ({ ...s, tag: e.target.value, page: 1 }) })
+            navigate({ search: (s: SearchParams) => ({ ...s, tag: e.target.value, page: 1 }) })
           }
           className="h-9 rounded-md border border-input bg-background px-3 text-sm"
         >
@@ -329,7 +329,7 @@ function ContactsView() {
               variant="outline"
               size="sm"
               disabled={search.page <= 1}
-              onClick={() => navigate({ search: (s) => ({ ...s, page: s.page - 1 }) })}
+              onClick={() => navigate({ search: (s: SearchParams) => ({ ...s, page: s.page - 1 }) })}
             >
               Previous
             </Button>
@@ -337,7 +337,7 @@ function ContactsView() {
               variant="outline"
               size="sm"
               disabled={search.page >= totalPages}
-              onClick={() => navigate({ search: (s) => ({ ...s, page: s.page + 1 }) })}
+              onClick={() => navigate({ search: (s: SearchParams) => ({ ...s, page: s.page + 1 }) })}
             >
               Next
             </Button>
