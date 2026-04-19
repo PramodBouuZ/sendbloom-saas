@@ -9,38 +9,241 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SuppressionsRouteImport } from './routes/suppressions'
+import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as ListsRouteImport } from './routes/lists'
+import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as ContactsRouteImport } from './routes/contacts'
+import { Route as CampaignsRouteImport } from './routes/campaigns'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AnalyticsRouteImport } from './routes/analytics'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as AdminTenantsRouteImport } from './routes/admin.tenants'
+import { Route as AdminActivityRouteImport } from './routes/admin.activity'
 
+const SuppressionsRoute = SuppressionsRouteImport.update({
+  id: '/suppressions',
+  path: '/suppressions',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ListsRoute = ListsRouteImport.update({
+  id: '/lists',
+  path: '/lists',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactsRoute = ContactsRouteImport.update({
+  id: '/contacts',
+  path: '/contacts',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CampaignsRoute = CampaignsRouteImport.update({
+  id: '/campaigns',
+  path: '/campaigns',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AnalyticsRoute = AnalyticsRouteImport.update({
+  id: '/analytics',
+  path: '/analytics',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/admin/',
+  path: '/admin/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminTenantsRoute = AdminTenantsRouteImport.update({
+  id: '/admin/tenants',
+  path: '/admin/tenants',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminActivityRoute = AdminActivityRouteImport.update({
+  id: '/admin/activity',
+  path: '/admin/activity',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/analytics': typeof AnalyticsRoute
+  '/auth': typeof AuthRoute
+  '/campaigns': typeof CampaignsRoute
+  '/contacts': typeof ContactsRoute
+  '/dashboard': typeof DashboardRoute
+  '/lists': typeof ListsRoute
+  '/settings': typeof SettingsRoute
+  '/suppressions': typeof SuppressionsRoute
+  '/admin/activity': typeof AdminActivityRoute
+  '/admin/tenants': typeof AdminTenantsRoute
+  '/admin/': typeof AdminIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/analytics': typeof AnalyticsRoute
+  '/auth': typeof AuthRoute
+  '/campaigns': typeof CampaignsRoute
+  '/contacts': typeof ContactsRoute
+  '/dashboard': typeof DashboardRoute
+  '/lists': typeof ListsRoute
+  '/settings': typeof SettingsRoute
+  '/suppressions': typeof SuppressionsRoute
+  '/admin/activity': typeof AdminActivityRoute
+  '/admin/tenants': typeof AdminTenantsRoute
+  '/admin': typeof AdminIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/analytics': typeof AnalyticsRoute
+  '/auth': typeof AuthRoute
+  '/campaigns': typeof CampaignsRoute
+  '/contacts': typeof ContactsRoute
+  '/dashboard': typeof DashboardRoute
+  '/lists': typeof ListsRoute
+  '/settings': typeof SettingsRoute
+  '/suppressions': typeof SuppressionsRoute
+  '/admin/activity': typeof AdminActivityRoute
+  '/admin/tenants': typeof AdminTenantsRoute
+  '/admin/': typeof AdminIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/analytics'
+    | '/auth'
+    | '/campaigns'
+    | '/contacts'
+    | '/dashboard'
+    | '/lists'
+    | '/settings'
+    | '/suppressions'
+    | '/admin/activity'
+    | '/admin/tenants'
+    | '/admin/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/analytics'
+    | '/auth'
+    | '/campaigns'
+    | '/contacts'
+    | '/dashboard'
+    | '/lists'
+    | '/settings'
+    | '/suppressions'
+    | '/admin/activity'
+    | '/admin/tenants'
+    | '/admin'
+  id:
+    | '__root__'
+    | '/'
+    | '/analytics'
+    | '/auth'
+    | '/campaigns'
+    | '/contacts'
+    | '/dashboard'
+    | '/lists'
+    | '/settings'
+    | '/suppressions'
+    | '/admin/activity'
+    | '/admin/tenants'
+    | '/admin/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AnalyticsRoute: typeof AnalyticsRoute
+  AuthRoute: typeof AuthRoute
+  CampaignsRoute: typeof CampaignsRoute
+  ContactsRoute: typeof ContactsRoute
+  DashboardRoute: typeof DashboardRoute
+  ListsRoute: typeof ListsRoute
+  SettingsRoute: typeof SettingsRoute
+  SuppressionsRoute: typeof SuppressionsRoute
+  AdminActivityRoute: typeof AdminActivityRoute
+  AdminTenantsRoute: typeof AdminTenantsRoute
+  AdminIndexRoute: typeof AdminIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/suppressions': {
+      id: '/suppressions'
+      path: '/suppressions'
+      fullPath: '/suppressions'
+      preLoaderRoute: typeof SuppressionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lists': {
+      id: '/lists'
+      path: '/lists'
+      fullPath: '/lists'
+      preLoaderRoute: typeof ListsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contacts': {
+      id: '/contacts'
+      path: '/contacts'
+      fullPath: '/contacts'
+      preLoaderRoute: typeof ContactsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/campaigns': {
+      id: '/campaigns'
+      path: '/campaigns'
+      fullPath: '/campaigns'
+      preLoaderRoute: typeof CampaignsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/analytics': {
+      id: '/analytics'
+      path: '/analytics'
+      fullPath: '/analytics'
+      preLoaderRoute: typeof AnalyticsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,11 +251,43 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/': {
+      id: '/admin/'
+      path: '/admin'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/tenants': {
+      id: '/admin/tenants'
+      path: '/admin/tenants'
+      fullPath: '/admin/tenants'
+      preLoaderRoute: typeof AdminTenantsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/activity': {
+      id: '/admin/activity'
+      path: '/admin/activity'
+      fullPath: '/admin/activity'
+      preLoaderRoute: typeof AdminActivityRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AnalyticsRoute: AnalyticsRoute,
+  AuthRoute: AuthRoute,
+  CampaignsRoute: CampaignsRoute,
+  ContactsRoute: ContactsRoute,
+  DashboardRoute: DashboardRoute,
+  ListsRoute: ListsRoute,
+  SettingsRoute: SettingsRoute,
+  SuppressionsRoute: SuppressionsRoute,
+  AdminActivityRoute: AdminActivityRoute,
+  AdminTenantsRoute: AdminTenantsRoute,
+  AdminIndexRoute: AdminIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
