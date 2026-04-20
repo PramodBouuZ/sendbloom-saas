@@ -4,7 +4,6 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Loader2, Users, X } from "lucide-react";
 import { previewAudience, type AudienceConfig, type AudiencePreview } from "@/lib/campaigns/audience";
 
@@ -254,5 +253,3 @@ export const DEFAULT_AUDIENCE: AudienceConfig = {
   excludeSuppressed: true,
 };
 
-// Suppress unused button import warning
-void Button;
