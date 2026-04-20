@@ -16,6 +16,10 @@ export type Database = {
     Tables: {
       campaigns: {
         Row: {
+          audience_exclude_suppressed: boolean
+          audience_exclude_tags: string[]
+          audience_include_tags: string[]
+          audience_list_ids: string[]
           completed_at: string | null
           created_at: string
           created_by: string | null
@@ -25,9 +29,11 @@ export type Database = {
           id: string
           json_content: Json | null
           list_id: string | null
+          mjml_content: string | null
           name: string
           preview_text: string | null
           reply_to: string | null
+          schedule_timezone: string
           scheduled_at: string | null
           segment_tags: string[] | null
           started_at: string | null
@@ -45,6 +51,10 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          audience_exclude_suppressed?: boolean
+          audience_exclude_tags?: string[]
+          audience_include_tags?: string[]
+          audience_list_ids?: string[]
           completed_at?: string | null
           created_at?: string
           created_by?: string | null
@@ -54,9 +64,11 @@ export type Database = {
           id?: string
           json_content?: Json | null
           list_id?: string | null
+          mjml_content?: string | null
           name: string
           preview_text?: string | null
           reply_to?: string | null
+          schedule_timezone?: string
           scheduled_at?: string | null
           segment_tags?: string[] | null
           started_at?: string | null
@@ -74,6 +86,10 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          audience_exclude_suppressed?: boolean
+          audience_exclude_tags?: string[]
+          audience_include_tags?: string[]
+          audience_list_ids?: string[]
           completed_at?: string | null
           created_at?: string
           created_by?: string | null
@@ -83,9 +99,11 @@ export type Database = {
           id?: string
           json_content?: Json | null
           list_id?: string | null
+          mjml_content?: string | null
           name?: string
           preview_text?: string | null
           reply_to?: string | null
+          schedule_timezone?: string
           scheduled_at?: string | null
           segment_tags?: string[] | null
           started_at?: string | null

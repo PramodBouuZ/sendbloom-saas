@@ -19,6 +19,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AnalyticsRouteImport } from './routes/analytics'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as CampaignsCampaignIdRouteImport } from './routes/campaigns.$campaignId'
 import { Route as AdminTenantsRouteImport } from './routes/admin.tenants'
 import { Route as AdminActivityRouteImport } from './routes/admin.activity'
 
@@ -72,6 +73,11 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
   path: '/admin/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CampaignsCampaignIdRoute = CampaignsCampaignIdRouteImport.update({
+  id: '/$campaignId',
+  path: '/$campaignId',
+  getParentRoute: () => CampaignsRoute,
+} as any)
 const AdminTenantsRoute = AdminTenantsRouteImport.update({
   id: '/admin/tenants',
   path: '/admin/tenants',
@@ -87,7 +93,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/analytics': typeof AnalyticsRoute
   '/auth': typeof AuthRoute
-  '/campaigns': typeof CampaignsRoute
+  '/campaigns': typeof CampaignsRouteWithChildren
   '/contacts': typeof ContactsRoute
   '/dashboard': typeof DashboardRoute
   '/lists': typeof ListsRoute
@@ -95,13 +101,14 @@ export interface FileRoutesByFullPath {
   '/suppressions': typeof SuppressionsRoute
   '/admin/activity': typeof AdminActivityRoute
   '/admin/tenants': typeof AdminTenantsRoute
+  '/campaigns/$campaignId': typeof CampaignsCampaignIdRoute
   '/admin/': typeof AdminIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/analytics': typeof AnalyticsRoute
   '/auth': typeof AuthRoute
-  '/campaigns': typeof CampaignsRoute
+  '/campaigns': typeof CampaignsRouteWithChildren
   '/contacts': typeof ContactsRoute
   '/dashboard': typeof DashboardRoute
   '/lists': typeof ListsRoute
@@ -109,6 +116,7 @@ export interface FileRoutesByTo {
   '/suppressions': typeof SuppressionsRoute
   '/admin/activity': typeof AdminActivityRoute
   '/admin/tenants': typeof AdminTenantsRoute
+  '/campaigns/$campaignId': typeof CampaignsCampaignIdRoute
   '/admin': typeof AdminIndexRoute
 }
 export interface FileRoutesById {
@@ -116,7 +124,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/analytics': typeof AnalyticsRoute
   '/auth': typeof AuthRoute
-  '/campaigns': typeof CampaignsRoute
+  '/campaigns': typeof CampaignsRouteWithChildren
   '/contacts': typeof ContactsRoute
   '/dashboard': typeof DashboardRoute
   '/lists': typeof ListsRoute
@@ -124,6 +132,7 @@ export interface FileRoutesById {
   '/suppressions': typeof SuppressionsRoute
   '/admin/activity': typeof AdminActivityRoute
   '/admin/tenants': typeof AdminTenantsRoute
+  '/campaigns/$campaignId': typeof CampaignsCampaignIdRoute
   '/admin/': typeof AdminIndexRoute
 }
 export interface FileRouteTypes {
@@ -140,6 +149,7 @@ export interface FileRouteTypes {
     | '/suppressions'
     | '/admin/activity'
     | '/admin/tenants'
+    | '/campaigns/$campaignId'
     | '/admin/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -154,6 +164,7 @@ export interface FileRouteTypes {
     | '/suppressions'
     | '/admin/activity'
     | '/admin/tenants'
+    | '/campaigns/$campaignId'
     | '/admin'
   id:
     | '__root__'
@@ -168,6 +179,7 @@ export interface FileRouteTypes {
     | '/suppressions'
     | '/admin/activity'
     | '/admin/tenants'
+    | '/campaigns/$campaignId'
     | '/admin/'
   fileRoutesById: FileRoutesById
 }
@@ -175,7 +187,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AnalyticsRoute: typeof AnalyticsRoute
   AuthRoute: typeof AuthRoute
-  CampaignsRoute: typeof CampaignsRoute
+  CampaignsRoute: typeof CampaignsRouteWithChildren
   ContactsRoute: typeof ContactsRoute
   DashboardRoute: typeof DashboardRoute
   ListsRoute: typeof ListsRoute
@@ -258,6 +270,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/campaigns/$campaignId': {
+      id: '/campaigns/$campaignId'
+      path: '/$campaignId'
+      fullPath: '/campaigns/$campaignId'
+      preLoaderRoute: typeof CampaignsCampaignIdRouteImport
+      parentRoute: typeof CampaignsRoute
+    }
     '/admin/tenants': {
       id: '/admin/tenants'
       path: '/admin/tenants'
@@ -275,11 +294,23 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface CampaignsRouteChildren {
+  CampaignsCampaignIdRoute: typeof CampaignsCampaignIdRoute
+}
+
+const CampaignsRouteChildren: CampaignsRouteChildren = {
+  CampaignsCampaignIdRoute: CampaignsCampaignIdRoute,
+}
+
+const CampaignsRouteWithChildren = CampaignsRoute._addFileChildren(
+  CampaignsRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AnalyticsRoute: AnalyticsRoute,
   AuthRoute: AuthRoute,
-  CampaignsRoute: CampaignsRoute,
+  CampaignsRoute: CampaignsRouteWithChildren,
   ContactsRoute: ContactsRoute,
   DashboardRoute: DashboardRoute,
   ListsRoute: ListsRoute,
