@@ -396,6 +396,74 @@ export type Database = {
           },
         ]
       }
+      tenant_domains: {
+        Row: {
+          aws_region: string
+          created_at: string
+          created_by: string | null
+          dkim_tokens: string[]
+          domain: string
+          id: string
+          last_error: string | null
+          last_polled_at: string | null
+          mail_from_domain: string | null
+          mail_from_mx_record: string | null
+          mail_from_spf_record: string | null
+          sns_subscription_arn: string | null
+          sns_topic_arn: string | null
+          status: Database["public"]["Enums"]["tenant_domain_status"]
+          tenant_id: string
+          updated_at: string
+          verified_at: string | null
+        }
+        Insert: {
+          aws_region?: string
+          created_at?: string
+          created_by?: string | null
+          dkim_tokens?: string[]
+          domain: string
+          id?: string
+          last_error?: string | null
+          last_polled_at?: string | null
+          mail_from_domain?: string | null
+          mail_from_mx_record?: string | null
+          mail_from_spf_record?: string | null
+          sns_subscription_arn?: string | null
+          sns_topic_arn?: string | null
+          status?: Database["public"]["Enums"]["tenant_domain_status"]
+          tenant_id: string
+          updated_at?: string
+          verified_at?: string | null
+        }
+        Update: {
+          aws_region?: string
+          created_at?: string
+          created_by?: string | null
+          dkim_tokens?: string[]
+          domain?: string
+          id?: string
+          last_error?: string | null
+          last_polled_at?: string | null
+          mail_from_domain?: string | null
+          mail_from_mx_record?: string | null
+          mail_from_spf_record?: string | null
+          sns_subscription_arn?: string | null
+          sns_topic_arn?: string | null
+          status?: Database["public"]["Enums"]["tenant_domain_status"]
+          tenant_id?: string
+          updated_at?: string
+          verified_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tenant_domains_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       tenants: {
         Row: {
           created_at: string
@@ -538,6 +606,12 @@ export type Database = {
         | "failed"
         | "unsubscribed"
       suppression_reason: "unsubscribe" | "bounce" | "complaint" | "manual"
+      tenant_domain_status:
+        | "pending"
+        | "verifying"
+        | "verified"
+        | "failed"
+        | "temporary_failure"
       tenant_plan: "free" | "starter" | "pro" | "enterprise"
     }
     CompositeTypes: {
@@ -687,6 +761,13 @@ export const Constants = {
         "unsubscribed",
       ],
       suppression_reason: ["unsubscribe", "bounce", "complaint", "manual"],
+      tenant_domain_status: [
+        "pending",
+        "verifying",
+        "verified",
+        "failed",
+        "temporary_failure",
+      ],
       tenant_plan: ["free", "starter", "pro", "enterprise"],
     },
   },
