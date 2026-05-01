@@ -45,11 +45,31 @@ export const Route = createRootRoute({
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:title", content: "BANTConfirm — Bulk Email Platform" },
-      { name: "description", content: "A multi-tenant bulk email platform for creating, sending, and tracking email campaigns." },
-      { property: "og:description", content: "A multi-tenant bulk email platform for creating, sending, and tracking email campaigns." },
-      { name: "twitter:description", content: "A multi-tenant bulk email platform for creating, sending, and tracking email campaigns." },
-      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/b733fbec-8476-4e9b-83c5-e820045bd57d/id-preview-fe339d11--73acf0a6-625c-4731-bde7-8d54fa25c4f6.lovable.app-1776665514784.png" },
-      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/b733fbec-8476-4e9b-83c5-e820045bd57d/id-preview-fe339d11--73acf0a6-625c-4731-bde7-8d54fa25c4f6.lovable.app-1776665514784.png" },
+      {
+        name: "description",
+        content:
+          "A multi-tenant bulk email platform for creating, sending, and tracking email campaigns.",
+      },
+      {
+        property: "og:description",
+        content:
+          "A multi-tenant bulk email platform for creating, sending, and tracking email campaigns.",
+      },
+      {
+        name: "twitter:description",
+        content:
+          "A multi-tenant bulk email platform for creating, sending, and tracking email campaigns.",
+      },
+      {
+        property: "og:image",
+        content:
+          "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/b733fbec-8476-4e9b-83c5-e820045bd57d/id-preview-fe339d11--73acf0a6-625c-4731-bde7-8d54fa25c4f6.lovable.app-1776665514784.png",
+      },
+      {
+        name: "twitter:image",
+        content:
+          "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/b733fbec-8476-4e9b-83c5-e820045bd57d/id-preview-fe339d11--73acf0a6-625c-4731-bde7-8d54fa25c4f6.lovable.app-1776665514784.png",
+      },
     ],
     links: [
       { rel: "stylesheet", href: appCss },

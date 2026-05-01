@@ -39,9 +39,17 @@ async function resolveAudience(
     const seen = new Set<string>();
     for (const m of members ?? []) {
       // Supabase nested join shape
-      const c = (m as unknown as {
-        contacts: { id: string; tags: string[] | null; is_suppressed: boolean; email: string; tenant_id: string };
-      }).contacts;
+      const c = (
+        m as unknown as {
+          contacts: {
+            id: string;
+            tags: string[] | null;
+            is_suppressed: boolean;
+            email: string;
+            tenant_id: string;
+          };
+        }
+      ).contacts;
       if (c && c.tenant_id === tenantId && !seen.has(c.id)) {
         seen.add(c.id);
         pool.push({ id: c.id, tags: c.tags, is_suppressed: c.is_suppressed, email: c.email });
@@ -103,10 +111,7 @@ export const previewAudience = createServerFn({ method: "POST" })
     let sampleEmails: string[] = [];
     if (contactIds.size > 0) {
       const ids = Array.from(contactIds).slice(0, 5);
-      const { data: sample } = await supabase
-        .from("contacts")
-        .select("email")
-        .in("id", ids);
+      const { data: sample } = await supabase.from("contacts").select("email").in("id", ids);
       sampleEmails = (sample ?? []).map((s) => s.email);
     }
 

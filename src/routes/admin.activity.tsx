@@ -9,7 +9,11 @@ export const Route = createFileRoute("/admin/activity")({
   component: () => (
     <Protected requiredRoles={["super_admin"]}>
       <AppShell>
-        <ComingSoon icon={BarChart3} title="Global Activity" description="Cross-tenant email activity charts arrive in Phase 5." />
+        <ComingSoon
+          icon={BarChart3}
+          title="Global Activity"
+          description="Cross-tenant email activity charts arrive in Phase 5."
+        />
       </AppShell>
     </Protected>
   ),

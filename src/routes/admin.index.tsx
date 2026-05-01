@@ -27,7 +27,10 @@ function AdminOverview() {
         supabase.from("tenants").select("id", { count: "exact", head: true }),
         supabase.from("profiles").select("id", { count: "exact", head: true }),
         supabase.from("campaigns").select("id", { count: "exact", head: true }),
-        supabase.from("email_logs").select("id", { count: "exact", head: true }).in("status", ["sent", "delivered", "opened", "clicked"]),
+        supabase
+          .from("email_logs")
+          .select("id", { count: "exact", head: true })
+          .in("status", ["sent", "delivered", "opened", "clicked"]),
       ]);
       setStats({
         tenants: t.count ?? 0,
@@ -71,14 +74,22 @@ function AdminOverview() {
         ))}
       </div>
       <Card>
-        <CardHeader><CardTitle>Manage</CardTitle></CardHeader>
+        <CardHeader>
+          <CardTitle>Manage</CardTitle>
+        </CardHeader>
         <CardContent className="grid gap-3 sm:grid-cols-2">
-          <Link to="/admin/tenants" className="rounded-lg border p-4 hover:border-primary hover:bg-secondary/40 transition">
+          <Link
+            to="/admin/tenants"
+            className="rounded-lg border p-4 hover:border-primary hover:bg-secondary/40 transition"
+          >
             <Building2 className="h-5 w-5 text-primary mb-2" />
             <p className="font-semibold">Tenants</p>
             <p className="text-sm text-muted-foreground">View workspaces, plans, and limits.</p>
           </Link>
-          <Link to="/admin/activity" className="rounded-lg border p-4 hover:border-primary hover:bg-secondary/40 transition">
+          <Link
+            to="/admin/activity"
+            className="rounded-lg border p-4 hover:border-primary hover:bg-secondary/40 transition"
+          >
             <Mail className="h-5 w-5 text-primary mb-2" />
             <p className="font-semibold">Global Activity</p>
             <p className="text-sm text-muted-foreground">Email sending across the platform.</p>

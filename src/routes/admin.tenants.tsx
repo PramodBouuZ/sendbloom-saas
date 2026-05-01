@@ -51,23 +51,36 @@ function Tenants() {
     setLoading(false);
   };
 
-  useEffect(() => { load(); }, []);
+  useEffect(() => {
+    load();
+  }, []);
 
   const updatePlan = async (id: string, plan: string) => {
-    const limits: Record<string, number> = { free: 1000, starter: 25000, pro: 250000, enterprise: 1000000 };
+    const limits: Record<string, number> = {
+      free: 1000,
+      starter: 25000,
+      pro: 250000,
+      enterprise: 1000000,
+    };
     const planTyped = plan as "free" | "starter" | "pro" | "enterprise";
     const { error } = await supabase
       .from("tenants")
       .update({ plan: planTyped, monthly_send_limit: limits[plan] })
       .eq("id", id);
     if (error) toast.error(error.message);
-    else { toast.success("Plan updated"); load(); }
+    else {
+      toast.success("Plan updated");
+      load();
+    }
   };
 
   const toggleActive = async (id: string, current: boolean) => {
     const { error } = await supabase.from("tenants").update({ is_active: !current }).eq("id", id);
     if (error) toast.error(error.message);
-    else { toast.success(current ? "Tenant suspended" : "Tenant activated"); load(); }
+    else {
+      toast.success(current ? "Tenant suspended" : "Tenant activated");
+      load();
+    }
   };
 
   return (
@@ -77,7 +90,9 @@ function Tenants() {
         <p className="mt-1 text-sm text-muted-foreground">Manage workspaces, plans, and limits.</p>
       </div>
       <Card>
-        <CardHeader><CardTitle>{tenants.length} workspaces</CardTitle></CardHeader>
+        <CardHeader>
+          <CardTitle>{tenants.length} workspaces</CardTitle>
+        </CardHeader>
         <CardContent>
           {loading ? (
             <p className="text-sm text-muted-foreground">Loading...</p>
@@ -86,16 +101,23 @@ function Tenants() {
           ) : (
             <div className="space-y-3">
               {tenants.map((t) => {
-                const usage = Math.min(100, Math.round((t.emails_sent_this_month / t.monthly_send_limit) * 100));
+                const usage = Math.min(
+                  100,
+                  Math.round((t.emails_sent_this_month / t.monthly_send_limit) * 100),
+                );
                 return (
-                  <div key={t.id} className="flex flex-col sm:flex-row gap-4 sm:items-center justify-between rounded-lg border p-4">
+                  <div
+                    key={t.id}
+                    className="flex flex-col sm:flex-row gap-4 sm:items-center justify-between rounded-lg border p-4"
+                  >
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 flex-wrap">
                         <p className="font-semibold truncate">{t.name}</p>
                         {!t.is_active && <Badge variant="destructive">Suspended</Badge>}
                       </div>
                       <p className="text-xs text-muted-foreground mt-1">
-                        {t.emails_sent_this_month.toLocaleString()} / {t.monthly_send_limit.toLocaleString()} emails ({usage}%)
+                        {t.emails_sent_this_month.toLocaleString()} /{" "}
+                        {t.monthly_send_limit.toLocaleString()} emails ({usage}%)
                       </p>
                       <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-secondary">
                         <div className="h-full bg-primary" style={{ width: `${usage}%` }} />
@@ -103,7 +125,9 @@ function Tenants() {
                     </div>
                     <div className="flex gap-2 items-center">
                       <Select value={t.plan} onValueChange={(v) => updatePlan(t.id, v)}>
-                        <SelectTrigger className="w-32"><SelectValue /></SelectTrigger>
+                        <SelectTrigger className="w-32">
+                          <SelectValue />
+                        </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="free">Free</SelectItem>
                           <SelectItem value="starter">Starter</SelectItem>
@@ -111,7 +135,11 @@ function Tenants() {
                           <SelectItem value="enterprise">Enterprise</SelectItem>
                         </SelectContent>
                       </Select>
-                      <Button variant="outline" size="sm" onClick={() => toggleActive(t.id, t.is_active)}>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => toggleActive(t.id, t.is_active)}
+                      >
                         {t.is_active ? "Suspend" : "Activate"}
                       </Button>
                     </div>

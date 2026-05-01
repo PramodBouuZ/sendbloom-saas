@@ -36,7 +36,10 @@ type CampaignRow = Pick<
   "id" | "name" | "subject" | "status" | "scheduled_at" | "updated_at" | "total_recipients"
 >;
 
-const STATUS_VARIANT: Record<CampaignRow["status"], "default" | "secondary" | "outline" | "destructive"> = {
+const STATUS_VARIANT: Record<
+  CampaignRow["status"],
+  "default" | "secondary" | "outline" | "destructive"
+> = {
   draft: "outline",
   scheduled: "secondary",
   sending: "default",
@@ -127,7 +130,11 @@ function CampaignsList() {
           </p>
         </div>
         <Button onClick={handleCreate} disabled={creating || !tenantId}>
-          {creating ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Plus className="h-4 w-4 mr-2" />}
+          {creating ? (
+            <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+          ) : (
+            <Plus className="h-4 w-4 mr-2" />
+          )}
           New campaign
         </Button>
       </div>

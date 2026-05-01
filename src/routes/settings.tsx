@@ -50,7 +50,9 @@ function Settings() {
       </div>
 
       <Card>
-        <CardHeader><CardTitle>Profile</CardTitle></CardHeader>
+        <CardHeader>
+          <CardTitle>Profile</CardTitle>
+        </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
             <Label>Email</Label>
@@ -58,7 +60,12 @@ function Settings() {
           </div>
           <div className="space-y-2">
             <Label htmlFor="dn">Display name</Label>
-            <Input id="dn" value={displayName} onChange={(e) => setDisplayName(e.target.value)} maxLength={80} />
+            <Input
+              id="dn"
+              value={displayName}
+              onChange={(e) => setDisplayName(e.target.value)}
+              maxLength={80}
+            />
           </div>
           <Button onClick={handleSave} disabled={saving}>
             {saving ? "Saving..." : "Save changes"}
@@ -67,11 +74,17 @@ function Settings() {
       </Card>
 
       <Card>
-        <CardHeader><CardTitle>Your roles</CardTitle></CardHeader>
+        <CardHeader>
+          <CardTitle>Your roles</CardTitle>
+        </CardHeader>
         <CardContent className="flex flex-wrap gap-2">
-          {roles.length === 0 && <span className="text-sm text-muted-foreground">No roles assigned.</span>}
+          {roles.length === 0 && (
+            <span className="text-sm text-muted-foreground">No roles assigned.</span>
+          )}
           {roles.map((r) => (
-            <Badge key={r} variant="secondary" className="capitalize">{r.replace("_", " ")}</Badge>
+            <Badge key={r} variant="secondary" className="capitalize">
+              {r.replace("_", " ")}
+            </Badge>
           ))}
         </CardContent>
       </Card>
