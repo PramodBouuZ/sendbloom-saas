@@ -10,30 +10,27 @@ const sendInput = z.object({
   html: z.string(),
   text: z.string().optional(),
   reply_to: z.string().email().optional(),
+  tenantId: z.string().uuid(),
   metadata: z.record(z.any()).optional(),
 });
 
 export const sendTransactionalEmail = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => sendInput.parse(input))
-  .handler(async ({ data: parsed, context }) => {
-    // In a real app, we would verify an API key.
-    // Since this is a server function, we can't easily use it as a REST API for external clients
-    // without more setup, but we can use it from our own frontend or other server functions.
+  .handler(async ({ data: parsed }) => {
+    // Basic tenant verification
+    const { data: tenant } = await supabaseAdmin
+      .from("tenants")
+      .select("id, is_active")
+      .eq("id", parsed.tenantId)
+      .single();
 
-    // For external REST API, TanStack Start supports API routes but it seems my version
-    // or configuration has issues with `@tanstack/react-start/api`.
-
-    // We'll skip the tenant verification here or assume it's passed in metadata for now
-    // if we were to call this internally.
-
-    const tenantId = (parsed.metadata?.tenantId as string);
-    if (!tenantId) {
-       throw new Error("tenantId is required in metadata for this demo action");
+    if (!tenant || !tenant.is_active) {
+      throw new Error("Invalid or inactive tenant");
     }
 
     const { data, error } = await sendEmail({
       ...parsed,
-      tenantId,
+      tenantId: tenant.id,
       metadata: { ...parsed.metadata, type: "transactional" },
     });
 
