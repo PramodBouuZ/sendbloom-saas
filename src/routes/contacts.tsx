@@ -198,8 +198,20 @@ function ContactsView() {
           </p>
         </div>
         <div className="flex gap-2">
-          <UploadCsvDialog tenantId={tenantId} onDone={() => { loadContacts(); loadTags(); }} />
-          <AddContactDialog tenantId={tenantId} onDone={() => { loadContacts(); loadTags(); }} />
+          <UploadCsvDialog
+            tenantId={tenantId}
+            onDone={() => {
+              loadContacts();
+              loadTags();
+            }}
+          />
+          <AddContactDialog
+            tenantId={tenantId}
+            onDone={() => {
+              loadContacts();
+              loadTags();
+            }}
+          />
         </div>
       </div>
 
@@ -222,7 +234,9 @@ function ContactsView() {
         >
           <option value="">All tags</option>
           {allTags.map((t) => (
-            <option key={t} value={t}>{t}</option>
+            <option key={t} value={t}>
+              {t}
+            </option>
           ))}
         </select>
       </div>
@@ -272,9 +286,13 @@ function ContactsView() {
                   </TableCell>
                   <TableCell>
                     {c.is_suppressed ? (
-                      <Badge variant="destructive" className="text-xs">Suppressed</Badge>
+                      <Badge variant="destructive" className="text-xs">
+                        Suppressed
+                      </Badge>
                     ) : (
-                      <Badge variant="outline" className="text-xs">Active</Badge>
+                      <Badge variant="outline" className="text-xs">
+                        Active
+                      </Badge>
                     )}
                   </TableCell>
                   <TableCell>
@@ -329,7 +347,9 @@ function ContactsView() {
               variant="outline"
               size="sm"
               disabled={search.page <= 1}
-              onClick={() => navigate({ search: (s: SearchParams) => ({ ...s, page: s.page - 1 }) })}
+              onClick={() =>
+                navigate({ search: (s: SearchParams) => ({ ...s, page: s.page - 1 }) })
+              }
             >
               Previous
             </Button>
@@ -337,7 +357,9 @@ function ContactsView() {
               variant="outline"
               size="sm"
               disabled={search.page >= totalPages}
-              onClick={() => navigate({ search: (s: SearchParams) => ({ ...s, page: s.page + 1 }) })}
+              onClick={() =>
+                navigate({ search: (s: SearchParams) => ({ ...s, page: s.page + 1 }) })
+              }
             >
               Next
             </Button>
@@ -371,7 +393,10 @@ function AddContactDialog({
       return;
     }
     setSubmitting(true);
-    const tagList = tags.split(",").map((t) => t.trim()).filter(Boolean);
+    const tagList = tags
+      .split(",")
+      .map((t) => t.trim())
+      .filter(Boolean);
     const { error } = await supabase.from("contacts").insert({
       tenant_id: tenantId,
       email: parsed.data,
@@ -390,7 +415,10 @@ function AddContactDialog({
     }
     toast.success("Contact added");
     setOpen(false);
-    setEmail(""); setFirstName(""); setLastName(""); setTags("");
+    setEmail("");
+    setFirstName("");
+    setLastName("");
+    setTags("");
     onDone();
   };
 
@@ -410,7 +438,13 @@ function AddContactDialog({
           <div className="space-y-3 py-4">
             <div>
               <Label htmlFor="email">Email *</Label>
-              <Input id="email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} />
+              <Input
+                id="email"
+                type="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div>
@@ -424,11 +458,18 @@ function AddContactDialog({
             </div>
             <div>
               <Label htmlFor="tg">Tags (comma-separated)</Label>
-              <Input id="tg" placeholder="lead, vip" value={tags} onChange={(e) => setTags(e.target.value)} />
+              <Input
+                id="tg"
+                placeholder="lead, vip"
+                value={tags}
+                onChange={(e) => setTags(e.target.value)}
+              />
             </div>
           </div>
           <DialogFooter>
-            <Button type="button" variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
+            <Button type="button" variant="outline" onClick={() => setOpen(false)}>
+              Cancel
+            </Button>
             <Button type="submit" disabled={submitting}>
               {submitting && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}Add
             </Button>
@@ -486,7 +527,10 @@ function UploadCsvDialog({
             first_name: (row.first_name ?? row.firstname ?? row.fname ?? "").trim() || undefined,
             last_name: (row.last_name ?? row.lastname ?? row.lname ?? "").trim() || undefined,
             tags: tagsRaw
-              ? tagsRaw.split(/[,;|]/).map((t) => t.trim()).filter(Boolean)
+              ? tagsRaw
+                  .split(/[,;|]/)
+                  .map((t) => t.trim())
+                  .filter(Boolean)
               : undefined,
           });
         }
@@ -501,7 +545,10 @@ function UploadCsvDialog({
     if (!tenantId || !parsed) return;
     setUploading(true);
     setProgress(0);
-    const extras = extraTags.split(",").map((t) => t.trim()).filter(Boolean);
+    const extras = extraTags
+      .split(",")
+      .map((t) => t.trim())
+      .filter(Boolean);
 
     const BATCH = 200;
     let done = 0;
@@ -519,9 +566,11 @@ function UploadCsvDialog({
           ? [...new Set([...(r.tags ?? []), ...extras])]
           : null,
       }));
-      const { error, count } = await supabase
-        .from("contacts")
-        .upsert(payload, { onConflict: "tenant_id,email", ignoreDuplicates: false, count: "exact" });
+      const { error, count } = await supabase.from("contacts").upsert(payload, {
+        onConflict: "tenant_id,email",
+        ignoreDuplicates: false,
+        count: "exact",
+      });
       if (error) {
         failed += slice.length;
       } else {
@@ -545,7 +594,11 @@ function UploadCsvDialog({
       open={open}
       onOpenChange={(o) => {
         setOpen(o);
-        if (!o) { setParsed(null); setExtraTags(""); setInvalid(0); }
+        if (!o) {
+          setParsed(null);
+          setExtraTags("");
+          setInvalid(0);
+        }
       }}
     >
       <DialogTrigger asChild>
@@ -578,9 +631,13 @@ function UploadCsvDialog({
           ) : (
             <div className="space-y-3">
               <div className="rounded-lg border bg-muted/40 p-3 text-sm">
-                <div><strong>{parsed.length}</strong> valid unique contacts ready to import</div>
+                <div>
+                  <strong>{parsed.length}</strong> valid unique contacts ready to import
+                </div>
                 {invalid > 0 && (
-                  <div className="text-destructive mt-1">{invalid} rows skipped (invalid email)</div>
+                  <div className="text-destructive mt-1">
+                    {invalid} rows skipped (invalid email)
+                  </div>
                 )}
               </div>
               <div>

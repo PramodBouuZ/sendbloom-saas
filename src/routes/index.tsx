@@ -29,26 +29,31 @@ function Landing() {
             <span className="font-display text-lg font-bold tracking-tight">BANTConfirm</span>
           </div>
           <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-muted-foreground">
-            <a href="#features" className="hover:text-foreground transition">Features</a>
-            <a href="#pricing" className="hover:text-foreground transition">Pricing</a>
-            <a href="#about" className="hover:text-foreground transition">About</a>
+            <a href="#features" className="hover:text-foreground transition">
+              Features
+            </a>
+            <a href="#pricing" className="hover:text-foreground transition">
+              Pricing
+            </a>
+            <a href="#about" className="hover:text-foreground transition">
+              About
+            </a>
           </nav>
           <div className="flex items-center gap-2">
             <Button asChild variant="ghost" size="sm">
               <Link to="/auth">Sign in</Link>
             </Button>
             <Button asChild size="sm">
-              <Link to="/auth" search={{ mode: "signup" }}>Get started</Link>
+              <Link to="/auth" search={{ mode: "signup" }}>
+                Get started
+              </Link>
             </Button>
           </div>
         </div>
       </header>
 
       {/* Hero */}
-      <section
-        className="relative overflow-hidden"
-        style={{ background: "var(--gradient-hero)" }}
-      >
+      <section className="relative overflow-hidden" style={{ background: "var(--gradient-hero)" }}>
         <div className="absolute inset-0 opacity-30" aria-hidden>
           <div
             className="absolute -top-40 -right-40 h-96 w-96 rounded-full blur-3xl"
@@ -65,7 +70,8 @@ function Landing() {
               <Zap className="h-3.5 w-3.5" /> Multi-tenant · Role-based · Built for scale
             </div>
             <h1 className="font-display text-5xl font-bold tracking-tight sm:text-6xl lg:text-7xl">
-              Bulk email,<br />
+              Bulk email,
+              <br />
               <span className="text-accent">done right.</span>
             </h1>
             <p className="mt-6 text-lg text-primary-foreground/80 sm:text-xl">
@@ -73,10 +79,22 @@ function Landing() {
               workspaces and a queue that just works.
             </p>
             <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
-              <Button asChild size="lg" variant="secondary" className="bg-accent text-accent-foreground hover:bg-accent/90">
-                <Link to="/auth" search={{ mode: "signup" }}>Start sending free</Link>
+              <Button
+                asChild
+                size="lg"
+                variant="secondary"
+                className="bg-accent text-accent-foreground hover:bg-accent/90"
+              >
+                <Link to="/auth" search={{ mode: "signup" }}>
+                  Start sending free
+                </Link>
               </Button>
-              <Button asChild size="lg" variant="outline" className="bg-transparent text-primary-foreground border-primary-foreground/30 hover:bg-primary-foreground/10 hover:text-primary-foreground">
+              <Button
+                asChild
+                size="lg"
+                variant="outline"
+                className="bg-transparent text-primary-foreground border-primary-foreground/30 hover:bg-primary-foreground/10 hover:text-primary-foreground"
+              >
                 <Link to="/auth">Sign in</Link>
               </Button>
             </div>
@@ -100,12 +118,36 @@ function Landing() {
 
         <div className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {[
-            { icon: Send, title: "Campaign Builder", desc: "Drag-and-drop editor, scheduling, A/B subject testing, and audience segmentation." },
-            { icon: Users, title: "Contact Management", desc: "Bulk CSV upload, automatic deduplication, tags, and lists." },
-            { icon: BarChart3, title: "Analytics", desc: "Open rates, click rates, bounces, daily charts — every metric in real-time." },
-            { icon: Shield, title: "Multi-tenant Security", desc: "Workspace isolation, role-based access, and per-tenant suppression lists." },
-            { icon: Mail, title: "Deliverability", desc: "Tracking pixels, click redirects, automatic bounce handling, and unsubscribe compliance." },
-            { icon: Zap, title: "Queue-based Sending", desc: "Reliable delivery with automatic retries, rate limiting, and batch processing." },
+            {
+              icon: Send,
+              title: "Campaign Builder",
+              desc: "Drag-and-drop editor, scheduling, A/B subject testing, and audience segmentation.",
+            },
+            {
+              icon: Users,
+              title: "Contact Management",
+              desc: "Bulk CSV upload, automatic deduplication, tags, and lists.",
+            },
+            {
+              icon: BarChart3,
+              title: "Analytics",
+              desc: "Open rates, click rates, bounces, daily charts — every metric in real-time.",
+            },
+            {
+              icon: Shield,
+              title: "Multi-tenant Security",
+              desc: "Workspace isolation, role-based access, and per-tenant suppression lists.",
+            },
+            {
+              icon: Mail,
+              title: "Deliverability",
+              desc: "Tracking pixels, click redirects, automatic bounce handling, and unsubscribe compliance.",
+            },
+            {
+              icon: Zap,
+              title: "Queue-based Sending",
+              desc: "Reliable delivery with automatic retries, rate limiting, and batch processing.",
+            },
           ].map((f) => (
             <div
               key={f.title}
@@ -127,13 +169,31 @@ function Landing() {
         <div className="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto">
             <h2 className="font-display text-4xl font-bold tracking-tight">Simple pricing</h2>
-            <p className="mt-4 text-lg text-muted-foreground">Start free. Scale when you need to.</p>
+            <p className="mt-4 text-lg text-muted-foreground">
+              Start free. Scale when you need to.
+            </p>
           </div>
           <div className="mt-16 grid gap-6 lg:grid-cols-3">
             {[
-              { name: "Free", price: "$0", limit: "1,000 emails/mo", features: ["1 workspace", "1 user", "Basic analytics", "Suppression list"] },
-              { name: "Starter", price: "$29", limit: "25,000 emails/mo", features: ["3 users", "Drag-and-drop editor", "A/B testing", "Priority queue"], featured: true },
-              { name: "Pro", price: "$99", limit: "250,000 emails/mo", features: ["Unlimited users", "Webhooks", "Custom domain", "Dedicated support"] },
+              {
+                name: "Free",
+                price: "$0",
+                limit: "1,000 emails/mo",
+                features: ["1 workspace", "1 user", "Basic analytics", "Suppression list"],
+              },
+              {
+                name: "Starter",
+                price: "$29",
+                limit: "25,000 emails/mo",
+                features: ["3 users", "Drag-and-drop editor", "A/B testing", "Priority queue"],
+                featured: true,
+              },
+              {
+                name: "Pro",
+                price: "$99",
+                limit: "250,000 emails/mo",
+                features: ["Unlimited users", "Webhooks", "Custom domain", "Dedicated support"],
+              },
             ].map((p) => (
               <div
                 key={p.name}
@@ -157,8 +217,14 @@ function Landing() {
                     </li>
                   ))}
                 </ul>
-                <Button asChild className="mt-6 w-full" variant={p.featured ? "default" : "outline"}>
-                  <Link to="/auth" search={{ mode: "signup" }}>Get started</Link>
+                <Button
+                  asChild
+                  className="mt-6 w-full"
+                  variant={p.featured ? "default" : "outline"}
+                >
+                  <Link to="/auth" search={{ mode: "signup" }}>
+                    Get started
+                  </Link>
                 </Button>
               </div>
             ))}
@@ -168,10 +234,16 @@ function Landing() {
 
       {/* CTA */}
       <section className="mx-auto max-w-5xl px-4 py-24 sm:px-6 lg:px-8 text-center">
-        <h2 className="font-display text-4xl font-bold tracking-tight">Ready to send better email?</h2>
-        <p className="mt-4 text-lg text-muted-foreground">Set up your workspace in under a minute.</p>
+        <h2 className="font-display text-4xl font-bold tracking-tight">
+          Ready to send better email?
+        </h2>
+        <p className="mt-4 text-lg text-muted-foreground">
+          Set up your workspace in under a minute.
+        </p>
         <Button asChild size="lg" className="mt-8">
-          <Link to="/auth" search={{ mode: "signup" }}>Create your workspace</Link>
+          <Link to="/auth" search={{ mode: "signup" }}>
+            Create your workspace
+          </Link>
         </Button>
       </section>
 

@@ -9,7 +9,11 @@ export const Route = createFileRoute("/analytics")({
   component: () => (
     <Protected>
       <AppShell>
-        <ComingSoon icon={BarChart3} title="Analytics" description="Open rate, click rate, bounce rate, daily charts. Phase 5." />
+        <ComingSoon
+          icon={BarChart3}
+          title="Analytics"
+          description="Open rate, click rate, bounce rate, daily charts. Phase 5."
+        />
       </AppShell>
     </Protected>
   ),

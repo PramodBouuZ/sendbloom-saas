@@ -2,6 +2,7 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { format } from "date-fns";
 import { z } from "zod";
+import { sendCampaign } from "@/lib/campaigns/actions";
 
 import { Protected } from "@/lib/protected";
 import { AppShell } from "@/components/app-shell";
@@ -12,12 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 import { Badge } from "@/components/ui/badge";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import {
   Dialog,
@@ -28,7 +24,15 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
-import { ArrowLeft, Save, Loader2, Eye, Calendar as CalendarIcon, Send } from "lucide-react";
+import {
+  ArrowLeft,
+  Save,
+  Loader2,
+  Eye,
+  Calendar as CalendarIcon,
+  Send,
+  Beaker,
+} from "lucide-react";
 
 import { MjmlEditor } from "@/components/campaigns/mjml-editor";
 import { AudiencePicker, DEFAULT_AUDIENCE } from "@/components/campaigns/audience-picker";
@@ -66,6 +70,7 @@ function CampaignEditor() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [scheduleOpen, setScheduleOpen] = useState(false);
+  const [testEmailOpen, setTestEmailOpen] = useState(false);
 
   // Local editable state
   const [meta, setMeta] = useState({
@@ -156,6 +161,27 @@ function CampaignEditor() {
   };
 
   const handleSchedule = async (when: Date) => {
+    // If scheduling for "now", trigger immediate send
+    const isNow = Math.abs(when.getTime() - Date.now()) < 5000;
+
+    if (isNow) {
+      const saved = await persist();
+      if (!saved) return;
+
+      setSaving(true);
+      try {
+        await sendCampaign({ data: { campaignId } });
+        toast.success("Campaign is being sent!");
+        setScheduleOpen(false);
+        navigate({ to: "/campaigns" });
+      } catch (error: any) {
+        toast.error(error.message || "Failed to send campaign");
+      } finally {
+        setSaving(false);
+      }
+      return;
+    }
+
     const result = await persist({
       status: "scheduled",
       scheduled_at: when.toISOString(),
@@ -199,14 +225,23 @@ function CampaignEditor() {
           )}
         </div>
         <div className="flex items-center gap-2">
+          <Button
+            variant="outline"
+            onClick={() => setTestEmailOpen(true)}
+            disabled={saving || !mjml}
+          >
+            <Beaker className="h-4 w-4 mr-2" />
+            Send test
+          </Button>
           <Button variant="outline" onClick={handleSave} disabled={saving}>
-            {saving ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Save className="h-4 w-4 mr-2" />}
+            {saving ? (
+              <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+            ) : (
+              <Save className="h-4 w-4 mr-2" />
+            )}
             Save draft
           </Button>
-          <Button
-            onClick={() => setScheduleOpen(true)}
-            disabled={saving || !mjml || !meta.subject}
-          >
+          <Button onClick={() => setScheduleOpen(true)} disabled={saving || !mjml || !meta.subject}>
             <Send className="h-4 w-4 mr-2" />
             Send / Schedule
           </Button>
@@ -288,11 +323,7 @@ function CampaignEditor() {
 
         <TabsContent value="audience" className="flex-1 m-0 mt-3 px-6 pb-6 overflow-auto">
           <div className="max-w-2xl mx-auto">
-            <AudiencePicker
-              tenantId={profile.tenant_id}
-              value={audience}
-              onChange={setAudience}
-            />
+            <AudiencePicker tenantId={profile.tenant_id} value={audience} onChange={setAudience} />
           </div>
         </TabsContent>
 
@@ -301,10 +332,15 @@ function CampaignEditor() {
             <div className="rounded-lg border bg-card p-4 space-y-1">
               <div className="text-xs uppercase text-muted-foreground tracking-wide">From</div>
               <div className="font-medium">
-                {meta.from_name} <span className="text-muted-foreground">&lt;{meta.from_email}&gt;</span>
+                {meta.from_name}{" "}
+                <span className="text-muted-foreground">&lt;{meta.from_email}&gt;</span>
               </div>
-              <div className="text-xs uppercase text-muted-foreground tracking-wide pt-2">Subject</div>
-              <div className="font-medium">{meta.subject || <span className="italic text-muted-foreground">No subject</span>}</div>
+              <div className="text-xs uppercase text-muted-foreground tracking-wide pt-2">
+                Subject
+              </div>
+              <div className="font-medium">
+                {meta.subject || <span className="italic text-muted-foreground">No subject</span>}
+              </div>
               {meta.preview_text && (
                 <div className="text-sm text-muted-foreground">{meta.preview_text}</div>
               )}
@@ -333,7 +369,97 @@ function CampaignEditor() {
         onConfirm={handleSchedule}
         saving={saving}
       />
+
+      <TestEmailDialog
+        open={testEmailOpen}
+        onOpenChange={setTestEmailOpen}
+        campaignId={campaignId}
+        subject={meta.subject}
+        html={html}
+        fromName={meta.from_name}
+        fromEmail={meta.from_email}
+      />
     </div>
+  );
+}
+
+import { sendTestEmail } from "@/lib/campaigns/actions";
+
+function TestEmailDialog({
+  open,
+  onOpenChange,
+  campaignId,
+  subject,
+  html,
+  fromName,
+  fromEmail,
+}: {
+  open: boolean;
+  onOpenChange: (v: boolean) => void;
+  campaignId: string;
+  subject: string;
+  html: string;
+  fromName: string;
+  fromEmail: string;
+}) {
+  const [email, setEmail] = useState("");
+  const [sending, setSending] = useState(false);
+
+  const handleSend = async () => {
+    if (!email) return;
+    setSending(true);
+    try {
+      await sendTestEmail({
+        data: {
+          campaignId,
+          to: email,
+          subject,
+          html,
+          fromName,
+          fromEmail,
+        },
+      });
+      toast.success("Test email sent");
+      onOpenChange(false);
+    } catch (error: any) {
+      toast.error(error.message || "Failed to send test email");
+    } finally {
+      setSending(false);
+    }
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Send test email</DialogTitle>
+          <DialogDescription>
+            Send a test version of this campaign to yourself or a colleague.
+          </DialogDescription>
+        </DialogHeader>
+        <div className="space-y-4 py-4">
+          <div className="space-y-2">
+            <Label htmlFor="test-email">Recipient email</Label>
+            <Input
+              id="test-email"
+              type="email"
+              placeholder="you@example.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
+        </div>
+        <DialogFooter>
+          <Button variant="outline" onClick={() => onOpenChange(false)}>
+            Cancel
+          </Button>
+          <Button onClick={handleSend} disabled={sending || !email}>
+            {sending && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
+            Send test
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 }
 
@@ -383,11 +509,15 @@ function ScheduleDialog({
         <DialogHeader>
           <DialogTitle>Send campaign</DialogTitle>
           <DialogDescription>
-            Sending happens via the queue worker (coming in Phase 4). Your choice
-            here is recorded on the campaign.
+            Sending happens via the queue worker (coming in Phase 4). Your choice here is recorded
+            on the campaign.
           </DialogDescription>
         </DialogHeader>
-        <RadioGroup value={mode} onValueChange={(v) => setMode(v as "now" | "later")} className="space-y-3 py-2">
+        <RadioGroup
+          value={mode}
+          onValueChange={(v) => setMode(v as "now" | "later")}
+          className="space-y-3 py-2"
+        >
           <label className="flex items-start gap-3 cursor-pointer">
             <RadioGroupItem value="now" id="now" className="mt-1" />
             <div>
@@ -428,4 +558,3 @@ function ScheduleDialog({
     </Dialog>
   );
 }
-

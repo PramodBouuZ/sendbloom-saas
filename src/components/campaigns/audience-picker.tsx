@@ -5,7 +5,11 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Loader2, Users, X } from "lucide-react";
-import { previewAudience, type AudienceConfig, type AudiencePreview } from "@/lib/campaigns/audience";
+import {
+  previewAudience,
+  type AudienceConfig,
+  type AudiencePreview,
+} from "@/lib/campaigns/audience";
 
 interface AudiencePickerProps {
   tenantId: string;
@@ -30,7 +34,12 @@ export function AudiencePicker({ tenantId, value, onChange }: AudiencePickerProp
     void (async () => {
       const [{ data: listData }, { data: tagData }] = await Promise.all([
         supabase.from("contact_lists").select("id, name").eq("tenant_id", tenantId).order("name"),
-        supabase.from("contacts").select("tags").eq("tenant_id", tenantId).not("tags", "is", null).limit(2000),
+        supabase
+          .from("contacts")
+          .select("tags")
+          .eq("tenant_id", tenantId)
+          .not("tags", "is", null)
+          .limit(2000),
       ]);
       setLists((listData ?? []) as ContactList[]);
       const set = new Set<string>();
@@ -110,7 +119,10 @@ export function AudiencePicker({ tenantId, value, onChange }: AudiencePickerProp
         suggestions={allTags}
         input={includeInput}
         setInput={setIncludeInput}
-        onAdd={(t) => { addTag("includeTags", t); setIncludeInput(""); }}
+        onAdd={(t) => {
+          addTag("includeTags", t);
+          setIncludeInput("");
+        }}
         onRemove={(t) => removeTag("includeTags", t)}
       />
 
@@ -122,7 +134,10 @@ export function AudiencePicker({ tenantId, value, onChange }: AudiencePickerProp
         suggestions={allTags}
         input={excludeInput}
         setInput={setExcludeInput}
-        onAdd={(t) => { addTag("excludeTags", t); setExcludeInput(""); }}
+        onAdd={(t) => {
+          addTag("excludeTags", t);
+          setExcludeInput("");
+        }}
         onRemove={(t) => removeTag("excludeTags", t)}
       />
 
@@ -197,7 +212,9 @@ function TagInput({
   onRemove: (t: string) => void;
 }) {
   const filtered = input
-    ? suggestions.filter((s) => s.toLowerCase().includes(input.toLowerCase()) && !tags.includes(s)).slice(0, 6)
+    ? suggestions
+        .filter((s) => s.toLowerCase().includes(input.toLowerCase()) && !tags.includes(s))
+        .slice(0, 6)
     : [];
   return (
     <div className="space-y-2">
@@ -252,4 +269,3 @@ export const DEFAULT_AUDIENCE: AudienceConfig = {
   excludeTags: [],
   excludeSuppressed: true,
 };
-

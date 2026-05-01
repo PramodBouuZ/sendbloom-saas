@@ -76,7 +76,7 @@ function ListsView() {
       return;
     }
     const ids = (data ?? []).map((l) => l.id);
-    let counts: Record<string, number> = {};
+    const counts: Record<string, number> = {};
     if (ids.length > 0) {
       const { data: members } = await supabase
         .from("contact_list_members")
@@ -111,7 +111,10 @@ function ListsView() {
       <ListDetail
         list={activeList}
         tenantId={tenantId}
-        onBack={() => { setActiveList(null); loadLists(); }}
+        onBack={() => {
+          setActiveList(null);
+          loadLists();
+        }}
       />
     );
   }
@@ -161,7 +164,8 @@ function ListsView() {
                       <AlertDialogHeader>
                         <AlertDialogTitle>Delete list?</AlertDialogTitle>
                         <AlertDialogDescription>
-                          This will remove "{list.name}" and its memberships. Contacts are not deleted.
+                          This will remove "{list.name}" and its memberships. Contacts are not
+                          deleted.
                         </AlertDialogDescription>
                       </AlertDialogHeader>
                       <AlertDialogFooter>
@@ -225,7 +229,8 @@ function CreateListDialog({
     }
     toast.success("List created");
     setOpen(false);
-    setName(""); setDescription("");
+    setName("");
+    setDescription("");
     onDone();
   };
 
@@ -267,7 +272,9 @@ function CreateListDialog({
             </div>
           </div>
           <DialogFooter>
-            <Button type="button" variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
+            <Button type="button" variant="outline" onClick={() => setOpen(false)}>
+              Cancel
+            </Button>
             <Button type="submit" disabled={submitting}>
               {submitting && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}Create
             </Button>
@@ -309,9 +316,7 @@ function ListDetail({
       setLoading(false);
       return;
     }
-    const rows = (data ?? [])
-      .map((d: any) => d.contact)
-      .filter(Boolean) as ContactRow[];
+    const rows = (data ?? []).map((d: any) => d.contact).filter(Boolean) as ContactRow[];
     rows.sort((a, b) => a.email.localeCompare(b.email));
     setMembers(rows);
     setLoading(false);
@@ -340,7 +345,10 @@ function ListDetail({
     <div className="p-6 space-y-6 max-w-7xl mx-auto">
       <div className="flex items-center justify-between flex-wrap gap-3">
         <div>
-          <button onClick={onBack} className="text-sm text-muted-foreground hover:text-foreground mb-1">
+          <button
+            onClick={onBack}
+            className="text-sm text-muted-foreground hover:text-foreground mb-1"
+          >
             ← Back to lists
           </button>
           <h1 className="text-2xl font-bold">{list.name}</h1>
@@ -396,7 +404,10 @@ function ListDetail({
           tenantId={tenantId}
           existingIds={new Set(members.map((m) => m.id))}
           onClose={() => setShowAdd(false)}
-          onDone={() => { setShowAdd(false); loadMembers(); }}
+          onDone={() => {
+            setShowAdd(false);
+            loadMembers();
+          }}
         />
       )}
     </div>
@@ -485,9 +496,7 @@ function AddContactsToListDialog({
               <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
             </div>
           ) : contacts.length === 0 ? (
-            <p className="text-center py-8 text-sm text-muted-foreground">
-              No contacts available.
-            </p>
+            <p className="text-center py-8 text-sm text-muted-foreground">No contacts available.</p>
           ) : (
             contacts.map((c) => (
               <label
@@ -513,7 +522,9 @@ function AddContactsToListDialog({
           )}
         </div>
         <DialogFooter>
-          <Button variant="outline" onClick={onClose}>Cancel</Button>
+          <Button variant="outline" onClick={onClose}>
+            Cancel
+          </Button>
           <Button onClick={handleAdd} disabled={saving || selected.size === 0}>
             {saving && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
             Add {selected.size > 0 ? `(${selected.size})` : ""}
